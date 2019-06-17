@@ -1,10 +1,10 @@
-#Çå¿Õ±äÁ¿+¿ØÖÆÃæ°å
+#æ¸…ç©ºå˜é‡+æŽ§åˆ¶é¢æ¿
 rm(list=ls())
 #Ctrl+l
 
-#¶ÁÈ¡Êý¾Ý
+#è¯»å–æ•°æ®
 w=read.csv("C:/Users/hp/Desktop/R_DATA/bcard_28.csv");
-#Ìî³ä³É0£¨¿ÕÖµÎª0/-1/NA£©Í¨¹ý¿¼²ì¿ÕÖµÊýÁ¿¼°ÏàÓ¦¶¨ÒåºÏÀíµÄÌî³ä¿ÕÖµ
+#å¡«å……æˆ0ï¼ˆç©ºå€¼ä¸º0/-1/NAï¼‰é€šè¿‡è€ƒå¯Ÿç©ºå€¼æ•°é‡åŠç›¸åº”å®šä¹‰åˆç†çš„å¡«å……ç©ºå€¼
 w[is.na(w$MAX_CPD),]$MAX_CPD<-0
 w[is.na(w$NOCALL_DAY),]$NOCALL_DAY<--1
 w[is.na(w$PTP_CONTACT),]$PTP_CONTACT<--1
@@ -16,13 +16,13 @@ w[is.na(w$FAMILY_INCOME),]$FAMILY_INCOME<--1
 w[is.na(w$IS_INSURE),]$IS_INSURE<-"NA"
 w[is.na(w$IS_SSI),]$IS_SSI<-"NA"
 
-#ÑÆ±äÁ¿×ªÒò×ÓÐÍ
+#å“‘å˜é‡è½¬å› å­åž‹
 w$IS_INSURE = as.factor(w$IS_INSURE)
 w$IS_SSI = as.factor(w$IS_SSI)
 w$CUS_SEX = as.factor(w$CUS_SEX)
 w$CERT_4_INITAL = as.factor(w$CERT_4_INITAL)
 
-#Ëæ»ú³éÑù
+#éšæœºæŠ½æ ·
 w=w[,c(3,5:28)]
 #rows <- nrow (w)   
 #indexes <- sample (rows,10000,replace =TRUE)   
@@ -31,7 +31,7 @@ data_class = sapply(w,class)
 factor_class = as.data.frame(which(sapply(w,class) == "factor"))
 rownames(factor_class)
 
-#¼ÆËãWOEÖµ
+#è®¡ç®—WOEå€¼
 cal<- function(data,y,var)
 {
   i_y = which(names(data)==y)
@@ -52,7 +52,7 @@ cal<- function(data,y,var)
   return(x0)
 }
 
-#Òò×Ó¡¢ÎÄ±¾±äÁ¿ÇóWOE
+#å› å­ã€æ–‡æœ¬å˜é‡æ±‚WOE
 x0 = cal(w,"TARGET","CUS_EDUCATION")
 x = x0
 x = rbind(x,cal(w,"TARGET","CUS_SEX"))
@@ -64,7 +64,7 @@ x = rbind(x,cal(w,"TARGET","IS_SSI"))
 x = rbind(x,cal(w,"TARGET","WK_EXP_CUR"))
 x = rbind(x,cal(w,"TARGET","CERT_4_INITAL"))
 
-#µ¼Èë°ü-SQLÓï¾äÊ¹ÓÃ
+#å¯¼å…¥åŒ…-SQLè¯­å¥ä½¿ç”¨
 library(gsubfn)
 library(proto)
 library(RSQLite)
@@ -72,12 +72,12 @@ library(DBI)
 library(sqldf)
 library(tcltk)
 
-#Ìî³äWOEÖµ--ÇóµÃµÄWOEÖµ°üº¬ºÜ¶àInf NA 
+#å¡«å……WOEå€¼--æ±‚å¾—çš„WOEå€¼åŒ…å«å¾ˆå¤šInf NA 
 x$WOE[which(x$WOE == Inf)]= 3
 x$WOE[which(x$WOE == -Inf)] = -3
 na.omit(x$WOE)
 
-#½øÐÐWOEÌæ»»,µÃµ½ÐÂµÄÑµÁ·¼¯
+#è¿›è¡ŒWOEæ›¿æ¢,å¾—åˆ°æ–°çš„è®­ç»ƒé›†
 w_woe = sqldf("select t.TARGET,t.MAX_CPD,T.NOCALL_DAY,T.PTP_CONTACT
                   ,FINISH_PERIODS_RATIO,SALESCOMMISSION,CUSTOMERSERVICERATES,CERTF_INTERVAL_YEARS,WK_3Y_EXP_NUM       
                   ,CUS_CHILDRENTOTAL,LOWPRINCIPAL,ASSUME_CPD,EXTRA_INIT_RATE
@@ -92,28 +92,28 @@ w_woe = sqldf("select t.TARGET,t.MAX_CPD,T.NOCALL_DAY,T.PTP_CONTACT
                   ,(select woe from x where x.Var_Name = 'WK_EXP_CUR' and x.Group_Type = WK_EXP_CUR) as WOE_WK_EXP_CUR
                   ,(select woe from x where x.Var_Name = 'CERT_4_INITAL' and x.Group_Type = CERT_4_INITAL) as WOE_CERT_4_INITAL
                   from w as t")
-#ÔÙ´Î²é¿´ÑµÁ·¼¯µÄÈ«²¿±äÁ¿ÀàÐÍ
+#å†æ¬¡æŸ¥çœ‹è®­ç»ƒé›†çš„å…¨éƒ¨å˜é‡ç±»åž‹
 sapply(w_woe,class)
 
-#ÔÙ´Î²é¿´ÑµÁ·¼¯µÄ¿ÕÖµÕ¼±È
+#å†æ¬¡æŸ¥çœ‹è®­ç»ƒé›†çš„ç©ºå€¼å æ¯”
 sapply(w_woe,function(x) sum(is.na(x))/length(x))
 
-#»Ø¹é½»²æÑéÖ¤µÄÊý¾Ý---Êý¾ÝÌØµã£¨È«ÎªÊýÖµÐÍ£©
+#å›žå½’äº¤å‰éªŒè¯çš„æ•°æ®---æ•°æ®ç‰¹ç‚¹ï¼ˆå…¨ä¸ºæ•°å€¼åž‹ï¼‰
 w=w_woe
 n=nrow(w)
 
-#ÈôÓÐ¿ÕÈ±Öµ--½øÐÐ¿ÕÈ±ÖµÌî²¹
+#è‹¥æœ‰ç©ºç¼ºå€¼--è¿›è¡Œç©ºç¼ºå€¼å¡«è¡¥
 library(missForest);
 w=missForest(w)$ximp
 
-#º¯Êý---Ä¿µÄ£º½øÐÐÊ®ÕÛ½»²æÑéÖ¤
+#å‡½æ•°---ç›®çš„ï¼šè¿›è¡ŒåæŠ˜äº¤å‰éªŒè¯
 CV=function(n,Z=10,seed=888){
 z=rep(1:Z,ceiling(n/Z))[1:n]
 set.seed(seed);z=sample(z,n)
 mm=list();for (i in 1:Z) mm[[i]]=(1:n)[z==i]
-return(mm)}#Êä³öZ¸öÏÂ±ê¼¯;mm[[i]]ÎªµÚi¸öÏÂ±ê¼¯i=1µ½Z
+return(mm)}#è¾“å‡ºZä¸ªä¸‹æ ‡é›†;mm[[i]]ä¸ºç¬¬iä¸ªä¸‹æ ‡é›†i=1åˆ°Z
 
-#µ¼ÈëËùÐèÒªµÄ³ÌÐò°ü
+#å¯¼å…¥æ‰€éœ€è¦çš„ç¨‹åºåŒ…
 library(rpart.plot);
 library(ipred);
 detach(package:adabag);
@@ -124,9 +124,9 @@ library(e1071);
 library(nnet);
 library(neuralnet)
 
-#»ù±¾¶¨Òå
+#åŸºæœ¬å®šä¹‰
 (n=nrow(w))
-D=15;Z=10;mm=CV(nrow(w),Z) #DÊÇÒò±äÁ¿Î»ÖÃ, ZÊÇÕÛÊý
+D=15;Z=10;mm=CV(nrow(w),Z) #Dæ˜¯å› å˜é‡ä½ç½®, Zæ˜¯æŠ˜æ•°
 gg=paste(names(w)[D],"~",".")#gg=(TARGET~.)
 gg=as.formula(gg)
 
@@ -141,10 +141,10 @@ gg2=paste(names(w)[D],"~btree(",names(w)[zy[1]],sep="")
 for(i in (1:ncol(w))[-D][-1])gg2=paste(gg2,",",names(w)[i],sep="")
 gg2=as.formula(paste(gg2,")"))
 
-#½¨Á¢MSE¾ØÕó
+#å»ºç«‹MSEçŸ©é˜µ
 MSE=matrix(1,Z,9);
 
-#¾ö²ßÊ÷»Ø¹é
+#å†³ç­–æ ‘å›žå½’
 J=1
 for(i in 1:Z){
   m=mm[[i]];
@@ -159,7 +159,7 @@ set.seed(1010);
 for(i in 1:Z){
   m=mm[[i]];
   M=mean((w[m,D]-mean(w[m,D]))^2)
-  a=mboost(gg1,data =w[-m,])#×¢ÒâÕâÀïÓÃgg1
+  a=mboost(gg1,data =w[-m,])#æ³¨æ„è¿™é‡Œç”¨gg1
   MSE[i,J]=mean((w[m,D]-predict(a,w[m,]))^2)/M
   }
 
@@ -169,7 +169,7 @@ set.seed(1010);
 for(i in 1:Z){
   m=mm[[i]];
   M=mean((w[m,D]-mean(w[m,D]))^2)
-  a=mboost(gg2,data =w[-m,])#×¢ÒâÕâÀïÓÃgg2
+  a=mboost(gg2,data =w[-m,])#æ³¨æ„è¿™é‡Œç”¨gg2
   MSE[i,J]=mean((w[m,D]-predict(a,w[m,]))^2)/M
   }
 
@@ -193,7 +193,7 @@ for(i in 1:Z){
   MSE[i,J]=mean((w[m,D]-predict(a,w[m,]))^2)/M
   } 
 
-#Ëæ»úÉ­ÁÖ
+#éšæœºæ£®æž—
 J=J+1;
 set.seed(1010);
 for(i in 1:Z){
@@ -203,7 +203,7 @@ for(i in 1:Z){
   MSE[i,J]=mean((w[m,D]-predict(a,w[m,]))^2)/M 
   }
 
-#Ö§³ÖÏòÁ¿»ú
+#æ”¯æŒå‘é‡æœº
 J=J+1;
 for(i in 1:Z){
   m=mm[[i]];
@@ -212,7 +212,7 @@ for(i in 1:Z){
   MSE[i,J]=mean((w[m,D]-predict(a,w[m,]))^2)/M 
   }
 
-#Ö§³ÖÏòÁ¿»ú_kernel
+#æ”¯æŒå‘é‡æœº_kernel
 J=J+1;
 for(i in 1:Z){
   m=mm[[i]];
@@ -221,7 +221,7 @@ for(i in 1:Z){
   MSE[i,J]=mean((w[m,D]-predict(a,w[m,]))^2)/M 
   }
 
-#Logistic»Ø¹é
+#Logisticå›žå½’
 J=1;
 for(i in 1:Z){
   m=mm[[i]];
@@ -230,10 +230,10 @@ for(i in 1:Z){
   MSE[i,J]=mean((w[m,D]-predict(a,w[m,]))^2)/M
   }
 
-#±ê×¼»¯´¦Àí
+#æ ‡å‡†åŒ–å¤„ç†
 #w=scale(w,center = TRUE,scale = TRUE);
 
-#Éñ¾­ÍøÂç---¹ý¶ÈÄâºÏ
+#ç¥žç»ç½‘ç»œ---è¿‡åº¦æ‹Ÿåˆ
 J=1;
 set.seed(1010);
 for(i in 1:Z){
@@ -243,8 +243,8 @@ for(i in 1:Z){
   MSE[i,J]=mean((w[m,D]-predict(a,w[m,])*max(w[,D]))^2)/M
   }
 
-#ÐÎ³ÉMSEÊý¾Ý¼¯
+#å½¢æˆMSEæ•°æ®é›†
 MSE=data.frame(MSE)
 names(MSE)=c("tree","boost1","boost2","bboost","bagging","RF","svm","ksvm","glm")
-#»­Í¼--excel
+#ç”»å›¾--excel
 write.csv(MSE,file="C:/Users/hp/Desktop/MSE_woe(10).csv")
