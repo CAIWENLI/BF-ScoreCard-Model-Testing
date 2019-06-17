@@ -1,40 +1,40 @@
-##Çå¿Õ±äÁ¿+¿ØÖÆÃæ°å
+##æ¸…ç©ºå˜é‡+æŽ§åˆ¶é¢æ¿
 rm(list=ls())
 ##Ctrl+l
 
-##¶ÁÈ¡Êý¾Ý+¿´Êý¾ÝÕûÌåÇé¿ö+¿´Êý¾ÝÊý¾Ý½á¹¹
+##è¯»å–æ•°æ®+çœ‹æ•°æ®æ•´ä½“æƒ…å†µ+çœ‹æ•°æ®æ•°æ®ç»“æž„
 bcard_org<-read.csv("C:/Users/hp/Desktop/R_DATA/bcard_woe.csv")
 
-#¼ìÑé¿ÕÖµÕ¼±È
+#æ£€éªŒç©ºå€¼å æ¯”
 sapply(bcard_org,class)
 sapply(bcard_org,function(x) sum(is.na(x))/length(x))
 
-#Ëæ»ú³éÑù
+#éšæœºæŠ½æ ·
 bcard=bcard_org[,c(3,4:29)]
 rows <- nrow (bcard)   
 indexes <- sample (rows,20000, replace =TRUE)   
 bcard_random<- bcard[indexes, ] 
 
-#¿ÕÖµÌî²¹
+#ç©ºå€¼å¡«è¡¥
 library(missForest);
 w=missForest(bcard_random)$ximp
 
-##Éú³ÉÑµÁ·¡¢ÑéÖ¤¼¯ 7:3
+##ç”Ÿæˆè®­ç»ƒã€éªŒè¯é›† 7:3
 set.seed(18)
 train_idx = sample(1:nrow(bcard),length(bcard$TARGET)*0.7)
 train = bcard[train_idx,]
 test = bcard[-train_idx,]
 
-##Êý¾Ý½á¹¹´¦Àí
+##æ•°æ®ç»“æž„å¤„ç†
 train_y = data.frame(train)[,1]
 test_y = na.omit(data.frame(test))[,1]
 train_data = data.frame(train)[,-1]
 test_data = na.omit(data.frame(test))[,-1]
-##Âß¼­»Ø¹é
+##é€»è¾‘å›žå½’
 glm=glm(train_y~., data =train_data,family=binomial(link=logit))
 glm_ptrain=predict(glm,train_data, type ="response")
 glm_ptest=predict(glm,test_data, type = "response")
-#»æÖÆROCÇúÏß
+#ç»˜åˆ¶ROCæ›²çº¿
 library(ROCR)
 pred_glm<- prediction(glm_ptrain,train_y)
 perf_glm<- performance(pred_glm,"tpr","fpr")
@@ -49,23 +49,23 @@ glm_m_auc_test<-round(as.numeric(performance(pred_glm_test,'auc')@y.values),3)
 glm_m_str_test<-paste("Mode_test-AUC:",glm_m_auc_test,sep="")
 legend("bottomright",0.2,c(glm_m_str,glm_m_str_test),2:4)
 
-#Éñ¾­ÍøÂç---ÐèÒª½øÐÐÊý¾ÝÊýÖµ»¯´¦Àí£¬²¢ÒªÇóÊý¾Ý½øÐÐ¹éÒ»»¯£¨È¨Öµ»áÊÜµ½Ó°Ïì£©
-#½¨Á¢Êý¾Ý½á¹¹--²»Í¬µÄº¯Êý¶ÔÊý¾Ý½á¹¹ÓÐÑÏ¸ñµÄÒªÇó
+#ç¥žç»ç½‘ç»œ---éœ€è¦è¿›è¡Œæ•°æ®æ•°å€¼åŒ–å¤„ç†ï¼Œå¹¶è¦æ±‚æ•°æ®è¿›è¡Œå½’ä¸€åŒ–ï¼ˆæƒå€¼ä¼šå—åˆ°å½±å“ï¼‰
+#å»ºç«‹æ•°æ®ç»“æž„--ä¸åŒçš„å‡½æ•°å¯¹æ•°æ®ç»“æž„æœ‰ä¸¥æ ¼çš„è¦æ±‚
 train_y = data.frame(train)[,1]
 test_y = na.omit(data.frame(test))[,1]
 train_data = data.matrix(train)[,-1]
 test_data = na.omit(data.matrix(test))[,-1]
-#¹éÒ»»¯´¦Àí--½öÉñ¾­ÍøÂçÐèÒª
+#å½’ä¸€åŒ–å¤„ç†--ä»…ç¥žç»ç½‘ç»œéœ€è¦
 train_s=scale(train_data [,1:25], center = TRUE, scale = TRUE)
 test_s=scale(test_data [,1:25], center = TRUE, scale = TRUE)
-#Ê¹ÓÃnnetº¯Êý
+#ä½¿ç”¨nnetå‡½æ•°
 library(caret)
 require(nnet)
 bcard_nnet=nnet(train_y~., data =train_s,size = 2, rang = 0.1,
                 decay = 5e-4, maxit = 200)
 bcard_nnet_ptrain=predict(bcard_nnet,train_s, type ="raw")
 bcard_nnet_ptest=predict(bcard_nnet,test_s, type = "raw")
-#»æÖÆROCÇúÏß
+#ç»˜åˆ¶ROCæ›²çº¿
 library(ROCR)
 pred_nnet<- prediction(bcard_nnet_ptrain,train_y)
 perf_nnet<- performance(pred_nnet,"tpr","fpr")
@@ -81,7 +81,7 @@ nnet_m_str_test<-paste("Mode_test-AUC:",nnet_m_auc_test,sep="")
 legend("bottomright",0.2,c(nnet_m_str,nnet_m_str_test),2:4)
 
 
-##Ëæ»úÉ­ÁÖ(·ÖÀàÊ÷)
+##éšæœºæ£®æž—(åˆ†ç±»æ ‘)
 library(randomForest)
 train_data = train
 test_data = test
@@ -94,7 +94,7 @@ print(importance(rf))
 train_data$rf_p_prob = rf$votes[,2]
 test_data$rf_p_prob = rf$test$votes[,2]
 head(rf$votes)
-#»æÖÆROCÇúÏßÍ¼
+#ç»˜åˆ¶ROCæ›²çº¿å›¾
 library(ROCR)
 pred_rf <- prediction(train_data$rf_p_prob, train_data$TARGET)
 perf_rf <- performance(pred_rf,"tpr","fpr")
@@ -110,7 +110,7 @@ rf_m_str_test<-paste("Mode_test-AUC:",rf_m_auc_test,sep="")
 legend("bottomright",0.2,c(rf_m_str,rf_m_str_test),2:4)
 
 ##Bagging
-#½¨Á¢Êý¾Ý½á¹¹--²»Í¬µÄº¯Êý¶ÔÊý¾Ý½á¹¹ÓÐÑÏ¸ñµÄÒªÇó
+#å»ºç«‹æ•°æ®ç»“æž„--ä¸åŒçš„å‡½æ•°å¯¹æ•°æ®ç»“æž„æœ‰ä¸¥æ ¼çš„è¦æ±‚
 train_y = data.matrix(train)[,1]
 test_y = na.omit(data.matrix(test))[,1]
 test_data = na.omit(data.frame(test))[,-1]
@@ -134,13 +134,13 @@ bag_m_auc_test<-round(as.numeric(performance(pred_bag_test,'auc')@y.values),3)
 bag_m_str_test<-paste("Mode_test-AUC:",bag_m_auc_test,sep="")
 legend("bottomright",0.2,c(bag_m_str,bag_m_str_test),2:4)
 
-#½¨Á¢Ö§³ÖÏòÁ¿»úÄ£ÐÍ
+#å»ºç«‹æ”¯æŒå‘é‡æœºæ¨¡åž‹
 train_y = data.matrix(train)[,1]
 test_y = na.omit(data.matrix(test))[,1]
 train_data = data.matrix(train)[,-1]
 test_data = na.omit(data.matrix(test))[,-1]
 
-#Ê¹ÓÃsvmº¯Êý
+#ä½¿ç”¨svmå‡½æ•°
 library(e1071)
 set.seed(10)
 bcard_svm=svm(train_y~.,kernel="sigmoid",
@@ -161,9 +161,9 @@ svm_m_auc_test<-round(as.numeric(performance(pred_svm_test,'auc')@y.values),3)
 svm_m_str_test<-paste("Mode_test-AUC:",svm_m_auc_test,sep="")
 legend("bottomright",0.2,c(svm_m_str,svm_m_str_test),2:4)
 
-#Ê¹ÓÃksvmº¯Êý
+#ä½¿ç”¨ksvmå‡½æ•°
 library(kernlab)
-#ÀàÐÍÒ»
+#ç±»åž‹ä¸€
 bcard_ksvm_r= ksvm(train_y~.,data=train_data,kernel="rbfdot",
                    kpar=list(sigma=0.05),C=5,cross=3)
 bcard_ksvm_r_ptrain=predict(bcard_ksvm_r,train_data, type="decision")
@@ -182,7 +182,7 @@ ksvm_m_auc_test<-round(as.numeric(performance(pred_ksvm_test,'auc')@y.values),3)
 ksvm_m_str_test<-paste("Mode_test-AUC:",ksvm_m_auc_test,sep="")
 legend("bottomright",0.2,c(ksvm_m_str,ksvm_m_str_test),2:4)
 
-#ÀàÐÍ¶þ
+#ç±»åž‹äºŒ
 bcard_ksvm_c=ksvm(train_y~.,data=train_data,type="C-bsvc",
                   kernel="rbfdot",C=10,prob.model=TRUE)
 bcard_ksvm_c_ptrain=predict(bcard_ksvm_c,train_data, type="decision")
