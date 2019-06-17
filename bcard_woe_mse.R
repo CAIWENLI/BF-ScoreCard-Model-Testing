@@ -1,17 +1,17 @@
-#Çå¿Õ±äÁ¿+¿ØÖÆÃæ°å
+#æ¸…ç©ºå˜é‡+æ§åˆ¶é¢æ¿
 rm(list=ls())
 #Ctrl+l
 
-#¶ÁÈ¡Êı¾İ
+#è¯»å–æ•°æ®
 w=read.csv("C:/Users/hp/Desktop/R_DATA/bcard_woe.csv");
-#Ëæ»ú³éÑù
+#éšæœºæŠ½æ ·
 w=w[,c(3,4:29)]
 rows <- nrow (w)   
 indexes <- sample (rows,50000,replace =TRUE)   
 w<- w[indexes, ] 
-#²é¿´¿ÕÖµÕ¼±È
+#æŸ¥çœ‹ç©ºå€¼å æ¯”
 sapply(w,function(x) sum(is.na(x))/length(x))
-#µ¼Èë°ü-SQLÓï¾äÊ¹ÓÃ
+#å¯¼å…¥åŒ…-SQLè¯­å¥ä½¿ç”¨
 library(gsubfn)
 library(proto)
 library(RSQLite)
@@ -19,7 +19,7 @@ library(DBI)
 library(sqldf)
 library(tcltk)
 
-#ËÑ³öºÃ¿Í»§µÄÌØÕ÷£¬½øĞĞ½¨Ä£
+#æœå‡ºå¥½å®¢æˆ·çš„ç‰¹å¾ï¼Œè¿›è¡Œå»ºæ¨¡
 w=sqldf("select WOE_CERT_4_INITAL
                 ,WOE_CUS_EDUCATION
                 ,WOE_WK_EXP_CUR
@@ -48,19 +48,19 @@ w=sqldf("select WOE_CERT_4_INITAL
                 ,WOE_WK_3Y_EXP_NUM
          from   w 
         where   TARGET=0")
-#Ìî¿ÕÖµ
+#å¡«ç©ºå€¼
 library(missForest);
 w=missForest(w)$ximp
 
-#º¯Êı---Ä¿µÄ£º½øĞĞÊ®ÕÛ½»²æÑéÖ¤
+#å‡½æ•°---ç›®çš„ï¼šè¿›è¡ŒåæŠ˜äº¤å‰éªŒè¯
 CV=function(n,Z=10,seed=888){
   z=rep(1:Z,ceiling(n/Z))[1:n]
   set.seed(seed);z=sample(z,n)
   mm=list();for (i in 1:Z) mm[[i]]=(1:n)[z==i]
-  return(mm)}#Êä³öZ¸öÏÂ±ê¼¯;mm[[i]]ÎªµÚi¸öÏÂ±ê¼¯i=1µ½Z
+  return(mm)}#è¾“å‡ºZä¸ªä¸‹æ ‡é›†;mm[[i]]ä¸ºç¬¬iä¸ªä¸‹æ ‡é›†i=1åˆ°Z
 
 
-#µ¼ÈëËùĞèÒªµÄ³ÌĞò°ü
+#å¯¼å…¥æ‰€éœ€è¦çš„ç¨‹åºåŒ…
 library(rpart.plot);
 library(ipred);
 detach(package:adabag);
@@ -71,9 +71,9 @@ library(e1071);
 library(nnet);
 library(neuralnet)
 
-#»ù±¾¶¨Òå
+#åŸºæœ¬å®šä¹‰
 (n=nrow(w))
-D=15;Z=10;mm=CV(nrow(w),Z) #DÊÇÒò±äÁ¿Î»ÖÃ, ZÊÇÕÛÊı
+D=15;Z=10;mm=CV(nrow(w),Z) #Dæ˜¯å› å˜é‡ä½ç½®, Zæ˜¯æŠ˜æ•°
 gg=paste(names(w)[D],"~",".")#gg=(TARGET~.)
 gg=as.formula(gg)
 
@@ -88,10 +88,10 @@ gg2=paste(names(w)[D],"~btree(",names(w)[zy[1]],sep="")
 for(i in (1:ncol(w))[-D][-1])gg2=paste(gg2,",",names(w)[i],sep="")
 gg2=as.formula(paste(gg2,")"))
 
-#½¨Á¢MSE¾ØÕó
+#å»ºç«‹MSEçŸ©é˜µ
 MSE=matrix(1,Z,11);
 
-#¾ö²ßÊ÷»Ø¹é
+#å†³ç­–æ ‘å›å½’
 J=1
 for(i in 1:Z){
   m=mm[[i]];
@@ -106,7 +106,7 @@ set.seed(1010);
 for(i in 1:Z){
   m=mm[[i]];
   M=mean((w[m,D]-mean(w[m,D]))^2)
-  a=mboost(gg1,data =w[-m,])#×¢ÒâÕâÀïÓÃgg1
+  a=mboost(gg1,data =w[-m,])#æ³¨æ„è¿™é‡Œç”¨gg1
   MSE[i,J]=mean((w[m,D]-predict(a,w[m,]))^2)/M
 }
 
@@ -116,7 +116,7 @@ set.seed(1010);
 for(i in 1:Z){
   m=mm[[i]];
   M=mean((w[m,D]-mean(w[m,D]))^2)
-  a=mboost(gg2,data =w[-m,])#×¢ÒâÕâÀïÓÃgg2
+  a=mboost(gg2,data =w[-m,])#æ³¨æ„è¿™é‡Œç”¨gg2
   MSE[i,J]=mean((w[m,D]-predict(a,w[m,]))^2)/M
 }
 
@@ -140,7 +140,7 @@ for(i in 1:Z){
   MSE[i,J]=mean((w[m,D]-predict(a,w[m,]))^2)/M
 } 
 
-#Ëæ»úÉ­ÁÖ
+#éšæœºæ£®æ—
 J=J+1;
 set.seed(1010);
 for(i in 1:Z){
@@ -150,7 +150,7 @@ for(i in 1:Z){
   MSE[i,J]=mean((w[m,D]-predict(a,w[m,]))^2)/M 
 }
 
-#Âß¼­»Ø¹é
+#é€»è¾‘å›å½’
 J=J+1;
 for(i in 1:Z){
   m=mm[[i]];
@@ -159,7 +159,7 @@ for(i in 1:Z){
   MSE[i,J]=mean((w[m,D]-predict(a,w[m,]))^2)/M
 }
 
-#ÏßĞÔ»Ø¹é
+#çº¿æ€§å›å½’
 J=J+1;
 for(i in 1:Z){
   m=mm[[i]];
@@ -168,7 +168,7 @@ for(i in 1:Z){
   MSE[i,J]=mean((w[m,D]-predict(a,w[m,]))^2)/M
 }
 
-#Ö§³ÖÏòÁ¿»ú
+#æ”¯æŒå‘é‡æœº
 J=J+1;
 for(i in 1:Z){
   m=mm[[i]];
@@ -177,7 +177,7 @@ for(i in 1:Z){
   MSE[i,J]=mean((w[m,D]-predict(a,w[m,]))^2)/M 
 }
 
-#Ö§³ÖÏòÁ¿»ú_kernel
+#æ”¯æŒå‘é‡æœº_kernel
 J=J+1;
 for(i in 1:Z){
   m=mm[[i]];
@@ -186,7 +186,7 @@ for(i in 1:Z){
   MSE[i,J]=mean((w[m,D]-predict(a,w[m,]))^2)/M 
 }
 
-#Éñ¾­ÍøÂç
+#ç¥ç»ç½‘ç»œ
 J=J+1;
 set.seed(1010);
 for(i in 1:Z){
@@ -196,10 +196,10 @@ for(i in 1:Z){
  MSE[i,J]=mean((w[m,D]-predict(a,w[m,])*max(w[,D]))^2)/M
 }
 
-#ĞÎ³ÉMSEÊı¾İ¼¯
+#å½¢æˆMSEæ•°æ®é›†
 MSE=data.frame(MSE)
 names(MSE)=c("tree","boost1","boost2","bboost","bagging","RF","lm","glm","svm","ksvm","net")
 (ME=apply(MSE,2,mean));MSE
 MSE[11,]=ME
-#»­Í¼--excel
+#ç”»å›¾--excel
 write.csv(MSE,file="C:/Users/hp/Desktop/MSE_WOE_FINCOME.csv")
