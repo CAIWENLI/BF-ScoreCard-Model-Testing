@@ -1,0 +1,29 @@
+--WOEÖµµÄ¼ÆËã£¬
+create table  sco.zs_car_var_woe_v1 
+as(
+
+select var_name
+,group_name
+,WOE
+,case when group_name is null then sum(IV)over(partition by var_name) else null end IV
+from
+(
+select 
+     t.var_name
+     ,t.group_name
+     ,ln( (t.n1/sum(t.n1) over (partition by var_name ))/
+     ((t.n-t.n1)/sum(t.n-t.n1)over(partition by var_name ))) WOE    
+     ,((t.n1/sum(t.n1) over (partition by var_name ))-((t.n-t.n1)/sum(t.n-t.n1)over(partition by var_name )))
+     *ln((t.n1/sum(t.n1) over (partition by var_name ))/
+     ((t.n-t.n1)/sum(t.n-t.n1)over(partition by var_name ))) IV
+from ZS_CAR_VAR_PRE_V2 t
+))
+
+
+
+
+
+
+
+
+ 

@@ -1,0 +1,452 @@
+
+------------分组+填充WOE------------------
+/*create table  sco.zs_CAR_var_clus_v1
+(
+ CREATE_TIME date 
+,UPDATE_TIME date
+,GROUP_TYPE Varchar2(30)
+,TESTNAME  Varchar2(30)
+,clus number
+,N  number
+,N1 number
+,BADRATE number
+,IS_NUM number 
+,IS_MONOTONE number
+,DEFAULT_GROUP number
+,WOE  number
+)*/
+--1、CHILDREN_TOTAL
+insert into  sco.zs_CAR_var_clus_v1(CREATE_TIME,UPDATE_TIME,group_type,TESTNAME,clus,N,N1,BADRATE,IS_NUM,IS_MONOTONE,DEFAULT_GROUP,WOE)
+select sysdate CREATE_TIME 
+       ,sysdate UPDATE_TIME       
+       ,upper('CHILDREN_TOTAL') group_type
+       ,t2.group_name testname
+       ,row_number()over(order by badrate DESC ) clus
+       , N1
+       , N
+       , badrate
+       ,1 is_num
+       ,1 IS_MONOTONE
+       ,1 DEFAULT_GROUP
+       ,t2.woe
+     from 
+     (select t.*,n1/n badrate
+      from sco.Zs_Car_Var_Pre_V2 t )t1,sco.zs_car_var_woe_v1 t2
+     where t1.var_name='CHILDREN_TOTAL '
+     and t2.var_name='CHILDREN_TOTAL '
+     and t2.group_name=t1.group_name;
+
+commit;
+--select * from dual;
+--2、GPS_SUM
+insert into  sco.zs_CAR_var_clus_v1(CREATE_TIME,UPDATE_TIME,group_type,TESTNAME,clus,N,N1,BADRATE,IS_NUM,IS_MONOTONE,DEFAULT_GROUP,WOE)
+select sysdate CREATE_TIME 
+       ,sysdate UPDATE_TIME       
+       ,upper('GPS_SUM ') group_type
+       ,t2.group_name testname
+       ,row_number()over(order by badrate DESC ) clus
+       , N1
+       , N
+       , badrate
+       ,1 is_num
+       ,1 IS_MONOTONE
+       ,2 DEFAULT_GROUP---表示默认分组在2分组
+       ,t2.woe
+     from 
+     (select t.*,n1/n badrate
+      from sco.Zs_Car_Var_Pre_V2 t )t1,sco.zs_car_var_woe_v1 t2
+     where t1.var_name='GPS_SUM '
+     and t2.var_name='GPS_SUM '
+     and t2.group_name=t1.group_name;
+commit;
+
+--3、SERVICE_FEE
+insert into  sco.zs_CAR_var_clus_v1(CREATE_TIME,UPDATE_TIME,group_type,TESTNAME,clus,N,N1,BADRATE,IS_NUM,IS_MONOTONE,DEFAULT_GROUP,WOE)
+select sysdate CREATE_TIME 
+       ,sysdate UPDATE_TIME       
+       ,upper('SERVICE_FEE  ') group_type
+       ,t2.group_name testname
+       ,row_number()over(order by badrate DESC ) clus
+       , N1
+       , N
+       , badrate
+       ,1 is_num
+       ,1 IS_MONOTONE
+       ,1 DEFAULT_GROUP---表示默认分组在1分组
+       ,t2.woe
+     from 
+     (select t.*,n1/n badrate
+      from sco.Zs_Car_Var_Pre_V2 t )t1,sco.zs_car_var_woe_v1 t2
+     where t1.var_name='SERVICE_FEE '
+     and t2.var_name='SERVICE_FEE '
+     and t2.group_name=t1.group_name;
+commit;
+----4、VEHICLE_PRICE
+insert into  sco.zs_CAR_var_clus_v1(CREATE_TIME,UPDATE_TIME,group_type,TESTNAME,clus,N,N1,BADRATE,IS_NUM,IS_MONOTONE,DEFAULT_GROUP,WOE)
+select sysdate CREATE_TIME 
+       ,sysdate UPDATE_TIME       
+       ,upper('VEHICLE_PRICE  ') group_type
+       ,t2.group_name testname
+       ,row_number()over(order by badrate DESC ) clus
+       , N1
+       , N
+       , badrate
+       ,1 is_num
+       ,1 IS_MONOTONE
+       ,1 DEFAULT_GROUP---表示默认分组在1分组
+       ,t2.woe
+     from 
+     (select t.*,n1/n badrate
+      from sco.Zs_Car_Var_Pre_V2 t )t1,sco.zs_car_var_woe_v1 t2
+     where t1.var_name='VEHICLE_PRICE '
+     and t2.var_name='VEHICLE_PRICE '
+     and t2.group_name=t1.group_name;
+commit;
+
+--5、BUSINESSSUM
+insert into  sco.zs_CAR_var_clus_v1(CREATE_TIME,UPDATE_TIME,group_type,TESTNAME,clus,N,N1,BADRATE,IS_NUM,IS_MONOTONE,DEFAULT_GROUP,WOE)
+select sysdate CREATE_TIME 
+       ,sysdate UPDATE_TIME       
+       ,upper('BUSINESSSUM  ') group_type
+       ,t2.group_name testname
+       ,row_number()over(order by badrate DESC ) clus
+       , N1
+       , N
+       , badrate
+       ,1 is_num
+       ,1 IS_MONOTONE
+       ,1 DEFAULT_GROUP---表示默认分组在1分组
+       ,t2.woe
+     from 
+     (select t.*,n1/n badrate
+      from sco.Zs_Car_Var_Pre_V2 t )t1,sco.zs_car_var_woe_v1 t2
+     where t1.var_name='BUSINESSSUM '
+     and t2.var_name='BUSINESSSUM '
+     and t2.group_name=t1.group_name;
+commit;
+
+--6、PAYMENT_SUM
+insert into  sco.zs_CAR_var_clus_v1(CREATE_TIME,UPDATE_TIME,group_type,TESTNAME,clus,N,N1,BADRATE,IS_NUM,IS_MONOTONE,DEFAULT_GROUP,WOE)
+select sysdate CREATE_TIME 
+       ,sysdate UPDATE_TIME       
+       ,upper('PAYMENT_SUM  ') group_type
+       ,t2.group_name testname
+       ,row_number()over(order by badrate DESC ) clus
+       , N1
+       , N
+       , badrate
+       ,1 is_num
+       ,1 IS_MONOTONE
+       ,1 DEFAULT_GROUP---表示默认分组在2分组
+       ,t2.woe
+     from 
+     (select t.*,n1/n badrate
+      from sco.Zs_Car_Var_Pre_V2 t )t1,sco.zs_car_var_woe_v1 t2
+     where t1.var_name='PAYMENT_SUM '
+     and t2.var_name='PAYMENT_SUM '
+     and t2.group_name=t1.group_name;
+commit;
+--7、CAR_GUIDEPRICE
+insert into  sco.zs_CAR_var_clus_v1(CREATE_TIME,UPDATE_TIME,group_type,TESTNAME,clus,N,N1,BADRATE,IS_NUM,IS_MONOTONE,DEFAULT_GROUP,WOE)
+select sysdate CREATE_TIME 
+       ,sysdate UPDATE_TIME       
+       ,upper('CAR_GUIDEPRICE  ') group_type
+       ,t2.group_name testname
+       ,row_number()over(order by badrate DESC ) clus
+       , N1
+       , N
+       , badrate
+       ,1 is_num
+       ,1 IS_MONOTONE
+       ,1 DEFAULT_GROUP---表示默认分组在1分组
+       ,t2.woe
+     from 
+     (select t.*,n1/n badrate
+      from sco.Zs_Car_Var_Pre_V2 t )t1,sco.zs_car_var_woe_v1 t2
+     where t1.var_name='CAR_GUIDEPRICE '
+     and t2.var_name='CAR_GUIDEPRICE '
+     and t2.group_name=t1.group_name;
+commit;
+---8、CAR_TOTAL
+insert into  sco.zs_CAR_var_clus_v1(CREATE_TIME,UPDATE_TIME,group_type,TESTNAME,clus,N,N1,BADRATE,IS_NUM,IS_MONOTONE,DEFAULT_GROUP,WOE)
+
+select sysdate CREATE_TIME 
+       ,sysdate UPDATE_TIME       
+       ,upper('CAR_TOTAL  ') group_type
+       ,t2.group_name testname
+       ,row_number()over(order by badrate DESC ) clus
+       , N1
+       , N
+       , badrate
+       ,1 is_num
+       ,1 IS_MONOTONE
+       ,1 DEFAULT_GROUP---表示默认分组在1分组
+       ,t2.woe
+     from 
+     (select t.*,n1/n badrate
+      from sco.Zs_Car_Var_Pre_V2 t )t1,sco.zs_car_var_woe_v1 t2
+     where t1.var_name='CAR_TOTAL '
+     and t2.var_name='CAR_TOTAL '
+     and t2.group_name=t1.group_name;
+commit;
+---9、MONTH_TOTAL
+insert into  sco.zs_CAR_var_clus_v1(CREATE_TIME,UPDATE_TIME,group_type,TESTNAME,clus,N,N1,BADRATE,IS_NUM,IS_MONOTONE,DEFAULT_GROUP,WOE)
+
+select sysdate CREATE_TIME 
+       ,sysdate UPDATE_TIME       
+       ,upper('MONTH_TOTAL ') group_type
+       ,t2.group_name testname
+       ,row_number()over(order by badrate DESC ) clus
+       , N1
+       , N
+       , badrate
+       ,1 is_num
+       ,1 IS_MONOTONE
+       ,3 DEFAULT_GROUP---表示默认分组在3分组
+       ,t2.woe
+     from 
+     (select t.*,n1/n badrate
+      from sco.Zs_Car_Var_Pre_V2 t )t1,sco.zs_car_var_woe_v1 t2
+     where t1.var_name='MONTH_TOTAL '
+     and t2.var_name='MONTH_TOTAL '
+     and t2.group_name=t1.group_name;
+commit;  
+
+---10、MFEE_SUM
+insert into  sco.zs_CAR_var_clus_v1(CREATE_TIME,UPDATE_TIME,group_type,TESTNAME,clus,N,N1,BADRATE,IS_NUM,IS_MONOTONE,DEFAULT_GROUP,WOE)
+
+select sysdate CREATE_TIME 
+       ,sysdate UPDATE_TIME       
+       ,upper('MFEE_SUM ') group_type
+       ,t2.group_name testname
+       ,row_number()over(order by badrate DESC ) clus
+       , N1
+       , N
+       , badrate
+       ,1 is_num
+       ,1 IS_MONOTONE
+       ,1 DEFAULT_GROUP---表示默认分组在1分组
+       ,t2.woe
+     from 
+     (select t.*,n1/n badrate
+      from sco.Zs_Car_Var_Pre_V2 t )t1,sco.zs_car_var_woe_v1 t2
+     where t1.var_name='MFEE_SUM '
+     and t2.var_name='MFEE_SUM '
+     and t2.group_name=t1.group_name;
+commit;     
+---11、BELONG_AREA
+insert into  sco.zs_CAR_var_clus_v1(CREATE_TIME,UPDATE_TIME,group_type,TESTNAME,clus,N,N1,BADRATE,IS_NUM,IS_MONOTONE,DEFAULT_GROUP,WOE)
+
+select sysdate CREATE_TIME 
+       ,sysdate UPDATE_TIME       
+       ,upper('BELONG_AREA ') group_type
+       ,t2.group_name testname
+       ,row_number()over(order by badrate DESC ) clus
+       , N1
+       , N
+       , badrate
+       ,1 is_num
+       ,1 IS_MONOTONE
+       ,1 DEFAULT_GROUP---表示默认分组在1分组
+       ,t2.woe
+     from 
+     (select t.*,n1/n badrate
+      from sco.Zs_Car_Var_Pre_V2 t )t1,sco.zs_car_var_woe_v1 t2
+     where t1.var_name='BELONG_AREA'
+     and t2.var_name='BELONG_AREA'
+     and t2.group_name=t1.group_name;
+commit; 
+---12、CAR_BRAND
+insert into  sco.zs_CAR_var_clus_v1(CREATE_TIME,UPDATE_TIME,group_type,TESTNAME,clus,N,N1,BADRATE,IS_NUM,IS_MONOTONE,DEFAULT_GROUP,WOE)
+select sysdate CREATE_TIME 
+       ,sysdate UPDATE_TIME       
+       ,upper('CAR_BRAND ') group_type
+       ,t2.group_name testname
+       ,row_number()over(order by badrate DESC ) clus
+       , N1
+       , N
+       , badrate
+       ,1 is_num
+       ,1 IS_MONOTONE
+       ,3 DEFAULT_GROUP---表示默认分组在3分组，车品牌的贷款个数少于50的全部在3分组
+       ,t2.woe
+     from 
+     (select t.*,n1/n badrate
+      from sco.Zs_Car_Var_Pre_V2 t )t1,sco.zs_car_var_woe_v1 t2
+     where t1.var_name='CAR_BRAND '
+     and t2.var_name='CAR_BRAND '
+     and t2.group_name=t1.group_name;
+commit; 
+---13、EDU_EXPERIENCE
+insert into  sco.zs_CAR_var_clus_v1(CREATE_TIME,UPDATE_TIME,group_type,TESTNAME,clus,N,N1,BADRATE,IS_NUM,IS_MONOTONE,DEFAULT_GROUP,WOE)
+select sysdate CREATE_TIME 
+       ,sysdate UPDATE_TIME       
+       ,upper('EDU_EXPERIENCE ') group_type
+       ,t2.group_name testname
+       ,row_number()over(order by badrate DESC ) clus
+       , N1
+       , N
+       , badrate
+       ,1 is_num
+       ,1 IS_MONOTONE
+       ,2 DEFAULT_GROUP---表示默认分组在3分组，车品牌的贷款个数少于50的全部在3分组
+       ,t2.woe
+     from 
+     (select t.*,n1/n badrate
+      from sco.Zs_Car_Var_Pre_V2 t )t1,sco.zs_car_var_woe_v1 t2
+     where t1.var_name='EDU_EXPERIENCE '
+     and t2.var_name='EDU_EXPERIENCE '
+     and t2.group_name=t1.group_name;
+commit; 
+---14、HEADSHIP
+insert into  sco.zs_CAR_var_clus_v1(CREATE_TIME,UPDATE_TIME,group_type,TESTNAME,clus,N,N1,BADRATE,IS_NUM,IS_MONOTONE,DEFAULT_GROUP,WOE)
+ select sysdate CREATE_TIME 
+       ,sysdate UPDATE_TIME       
+       ,upper('HEADSHIP ') group_type
+       ,t2.group_name testname
+       ,row_number()over(order by badrate DESC ) clus
+       , N1
+       , N
+       , badrate
+       ,1 is_num
+       ,1 IS_MONOTONE
+       ,4 DEFAULT_GROUP---表示默认分组在4分组
+       ,t2.woe
+     from 
+     (select t.*,n1/n badrate
+      from sco.Zs_Car_Var_Pre_V2 t )t1,sco.zs_car_var_woe_v1 t2
+     where t1.var_name='HEADSHIP '
+     and t2.var_name='HEADSHIP '
+     and t2.group_name=t1.group_name;
+commit; 
+---15、PRODUCT_TYPE
+insert into  sco.zs_CAR_var_clus_v1(CREATE_TIME,UPDATE_TIME,group_type,TESTNAME,clus,N,N1,BADRATE,IS_NUM,IS_MONOTONE,DEFAULT_GROUP,WOE)
+ select sysdate CREATE_TIME 
+       ,sysdate UPDATE_TIME       
+       ,upper('PRODUCT_TYPE ') group_type
+       ,t2.group_name testname
+       ,row_number()over(order by badrate DESC ) clus
+       , N1
+       , N
+       , badrate
+       ,1 is_num
+       ,1 IS_MONOTONE
+       ,2 DEFAULT_GROUP---表示默认分组在2分组
+       ,t2.woe
+     from 
+     (select t.*,n1/n badrate
+      from sco.Zs_Car_Var_Pre_V2 t )t1,sco.zs_car_var_woe_v1 t2
+     where t1.var_name='PRODUCT_TYPE '
+     and t2.var_name='PRODUCT_TYPE '
+     and t2.group_name=t1.group_name;
+commit; 
+
+
+---16、PROVINCE
+insert into  sco.zs_CAR_var_clus_v1(CREATE_TIME,UPDATE_TIME,group_type,TESTNAME,clus,N,N1,BADRATE,IS_NUM,IS_MONOTONE,DEFAULT_GROUP,WOE)
+ select sysdate CREATE_TIME 
+       ,sysdate UPDATE_TIME       
+       ,upper('PROVINCE ') group_type
+       ,t2.group_name testname
+       ,row_number()over(order by badrate DESC ) clus
+       , N1
+       , N
+       , badrate
+       ,1 is_num
+       ,1 IS_MONOTONE
+       ,1 DEFAULT_GROUP---表示默认分组在1分组
+       ,t2.woe
+     from 
+     (select t.*,n1/n badrate
+      from sco.Zs_Car_Var_Pre_V2 t )t1,sco.zs_car_var_woe_v1 t2
+     where t1.var_name='PROVINCE '
+     and t2.var_name='PROVINCE '
+     and t2.group_name=t1.group_name;
+commit; 
+
+---17、CUSTOMER_GENDER
+insert into  sco.zs_CAR_var_clus_v1(CREATE_TIME,UPDATE_TIME,group_type,TESTNAME,clus,N,N1,BADRATE,IS_NUM,IS_MONOTONE,DEFAULT_GROUP,WOE)
+ select sysdate CREATE_TIME 
+       ,sysdate UPDATE_TIME       
+       ,upper('CUSTOMER_GENDER ') group_type
+       ,t2.group_name testname
+       ,row_number()over(order by badrate DESC ) clus
+       , N1
+       , N
+       , badrate
+       ,1 is_num
+       ,1 IS_MONOTONE
+       ,1 DEFAULT_GROUP---表示默认分组在4分组
+       ,t2.woe
+     from 
+     (select t.*,n1/n badrate
+      from sco.Zs_Car_Var_Pre_V2 t )t1,sco.zs_car_var_woe_v1 t2
+     where t1.var_name='CUSTOMER_GENDER '
+     and t2.var_name='CUSTOMER_GENDER '
+     and t2.group_name=t1.group_name;
+commit;
+
+---18、HOUSE_HAVE
+insert into  sco.zs_CAR_var_clus_v1(CREATE_TIME,UPDATE_TIME,group_type,TESTNAME,clus,N,N1,BADRATE,IS_NUM,IS_MONOTONE,DEFAULT_GROUP,WOE)
+ select sysdate CREATE_TIME 
+       ,sysdate UPDATE_TIME       
+       ,upper('CUSTOMER_GENDER ') group_type
+       ,t2.group_name testname
+       ,row_number()over(order by badrate DESC ) clus
+       , N1
+       , N
+       , badrate
+       ,1 is_num
+       ,1 IS_MONOTONE
+       ,2 DEFAULT_GROUP---表示默认分组在2分组
+       ,t2.woe
+     from 
+     (select t.*,n1/n badrate
+      from sco.Zs_Car_Var_Pre_V2 t )t1,sco.zs_car_var_woe_v1 t2
+     where t1.var_name='HOUSE_HAVE '
+     and t2.var_name='HOUSE_HAVE '
+     and t2.group_name=t1.group_name;
+commit;
+---19、MARRIAGE_STAUTS
+insert into  sco.zs_CAR_var_clus_v1(CREATE_TIME,UPDATE_TIME,group_type,TESTNAME,clus,N,N1,BADRATE,IS_NUM,IS_MONOTONE,DEFAULT_GROUP,WOE)
+ select sysdate CREATE_TIME 
+       ,sysdate UPDATE_TIME       
+       ,upper('MARRIAGE_STAUTS ') group_type
+       ,t2.group_name testname
+       ,row_number()over(order by badrate DESC ) clus
+       , N1
+       , N
+       , badrate
+       ,1 is_num
+       ,1 IS_MONOTONE
+       ,2 DEFAULT_GROUP---表示默认分组在2分组
+       ,t2.woe
+     from 
+     (select t.*,n1/n badrate
+      from sco.Zs_Car_Var_Pre_V2 t )t1,sco.zs_car_var_woe_v1 t2
+     where t1.var_name='MARRIAGE_STAUTS '
+     and t2.var_name='MARRIAGE_STAUTS '
+     and t2.group_name=t1.group_name;
+commit;
+--20、carstatus1
+insert into  sco.zs_CAR_var_clus_v1(CREATE_TIME,UPDATE_TIME,group_type,TESTNAME,clus,N,N1,BADRATE,IS_NUM,IS_MONOTONE,DEFAULT_GROUP,WOE)
+ select sysdate CREATE_TIME 
+       ,sysdate UPDATE_TIME       
+       ,upper('carstatus1') group_type
+       ,t2.group_name testname
+       ,row_number()over(order by badrate DESC ) clus
+       , N1
+       , N
+       , badrate
+       ,1 is_num
+       ,1 IS_MONOTONE
+       ,1 DEFAULT_GROUP---表示默认分组在1分组
+       ,t2.woe
+     from 
+     (select t.*,n1/n badrate
+      from sco.Zs_Car_Var_Pre_V2 t
+      )t1,sco.zs_car_var_woe_v1 t2
+     where t1.var_name='CARSTATUS1 '
+     and t2.var_name='CARSTATUS1 '
+     and t2.group_name=t1.group_name;
+commit;

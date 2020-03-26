@@ -1,0 +1,5 @@
+select * from ZS_CAR_BASETEST t;
+
+
+ create table sco.zs_car_test
+ as (select * from cu.zs_car_add_basetest)

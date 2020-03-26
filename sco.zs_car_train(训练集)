@@ -1,0 +1,145 @@
+
+create table sco.zs_car_train
+as
+(
+select  CONTRACT_NO
+,TARGET
+,INPUTDATE
+,CUSTOMER_GENDER
+,CUSTOMER_TYPE
+,CERT_TYPE
+,CERTF_AWD_YEAR
+,CERTF_EXP_YEAR
+,CUSTOMER_AGE
+,MARRIAGE_STAUTS
+,NATIVE_PLACE
+,EDU_EXPERIENCE
+,EDU_DEGREE
+,WORK_CUR_YEARS
+,WORK_TOT_YEARS
+,OCCUPATION
+,HEADSHIP
+,POSITION
+,EMPLOYEE_TYPE
+,HOUSE_HAVE
+,HOUSE_YEARS
+,CHILDREN_TOTAL
+,ONESELF_INCOME
+,SPOUSE_INCOME
+,OTHER_REVENUE
+,AGE_INCOME
+,MONTH_TOTAL
+,MONTH_EXPEND
+,RENT_EXPEND
+,CREDIT_MONTH
+,businesssum
+,NET_MARGIN
+,SERVICEPROVIDERS_TYPE
+,SERVICEPROVIDER_SNAME
+,RISK_IDENTIFICATION
+,CITY
+,PROVINCE
+,BELONG_AREA
+,BILL_RIGHT
+,SERVICEPROVIDERS_BANK
+,PRODUCT_TYPE
+,MONTHCALCULATION_METHOD
+,CAR_CARUSE
+,CAR_HAVE
+,CAR_SPECIFICATIONS
+,CARSTATUS1
+,(case when t.car_brand  like '%沃尔沃%' then '沃尔沃'
+when t.car_brand like '%菲亚特%' then '菲亚特'           
+when t.car_brand like '%莲花%' then '莲花'                
+when t.car_brand like '%三菱%' then '三菱'          
+when t.car_brand like '%三菱%' then '三菱'         
+when t.car_brand like '%凯迪拉克%' then '凯迪拉克'                
+when t.car_brand like '%丰田%' then '丰田'
+when t.car_brand like '%别克%' then '别克'
+when t.car_brand like '%铃木%' then '铃木'
+when t.car_brand like '%日产%' then '日产'         
+when t.car_brand like '%标致%' then '标致'            
+when t.car_brand like '%雪铁龙%' then '雪铁龙'
+when t.car_brand like '%马自达%' then '马自达'                 
+when t.car_brand like '%奔驰%' then '奔驰' 
+when t.car_brand like '%华泰%' then '华泰'            
+when t.car_brand like '%宝马%' then '宝马'        
+when t.car_brand like '%英菲尼迪' then '英菲尼迪'  
+when t.car_brand like '%Jeep' then 'Jeep' 
+when t.car_brand like '%雪佛兰' then '雪佛兰'            
+when (t.car_brand like '%奔驰' or t.car_brand like '%梅赛德斯%') then '奔驰'                                   
+when t.car_brand like '%丰田' then '丰田'                       
+when t.car_brand like '%海马%' then '海马' 
+when t.car_brand like '%三菱%' then '三菱'    
+when t.car_brand like '%奥迪%' then '奥迪'
+when t.car_brand like '%现代%' then '现代'       
+when t.car_brand like '%菲亚特%' then '菲亚特' 
+when t.car_brand like '%长城哈弗%' then '长城哈弗' 
+when t.car_brand like '%上汽荣威' then '上汽荣威'
+when t.car_brand like '%双龙%' then '双龙' 
+when t.car_brand like '%北京汽车%' then '北京汽车' 
+when t.car_brand like '%金龙%' then '金龙' 
+when t.car_brand like '%观致%' then '观致' 
+when t.car_brand like '%铃木%' then '铃木' 
+when t.car_brand like '%起亚%' then '起亚' 
+when t.car_brand like '%保时捷%' then '保时捷' 
+when t.car_brand like '%福田汽车%' then '福田汽车' 
+when t.car_brand like '%大运汽车%' then '大运汽车' 
+when t.car_brand like '%克莱斯勒%' then '克莱斯勒' 
+when t.car_brand like '%比亚迪%' then '比亚迪' 
+when t.car_brand like '%江铃%' then '江铃' 
+when t.car_brand like '%英菲尼迪%' then '英菲尼迪'
+when t.car_brand like '%吉奥%' then '吉奥'
+when t.car_brand like '%通用五菱%' then '通用五菱'
+when t.car_brand like '%海马%' then '海马'
+when t.car_brand like '%金杯%' then '金杯'
+when t.car_brand like '%中国重汽%' then '中国重汽'
+when t.car_brand like '%力帆%' then '力帆'
+when t.car_brand in( '迷你' ,'MINI') then 'MINI'
+when t.car_brand in ('上汽','上汽商用车','上汽集团') then '上汽汽车'
+else t.car_brand end) CARBRAND
+,GPS_FLAG
+,GPS_SUM
+,CAR_GUIDEPRICE
+,ASSESS_PRICE
+,CAR_YEAR
+,CAR_JORUNEY
+,USEDASSESS_FEE
+,STAMP_TAXAMT
+,SERVICE_FEE
+,MFEE_SUM
+,VEHICLE_PRICE
+,ALLOCATION_SUM
+,INSURANCE_SUM
+,REVENUE_TAX
+,CAR_TOTAL
+,PAYMENT_RATE
+,PAYMENT_SUM
+,FINALPAYMENT_RATE
+,FINALPAYMENT_SUM
+,DEPOSIT_RATE
+,DEPOSIT_SUM
+,PERIODS
+,PUTOUT_APPLYAMOUNT
+,CREDIT_RATE
+,REPAYMENT_WAY
+,REPLACE_BANK
+,COAPPLICANT_CNT
+,WITNESS_CNT
+,ASSURER_CNT
+,PARTICIPANT_CNT
+,PARTICIPANT1_CNT
+,PARTICIPANT2_CNT
+,PARTICIPANT3_CNT
+,PARTICIPANT4_CNT
+,PARTICIPANT5_CNT
+,PARTICIPANT6_CNT
+,PARTICIPANT7_CNT
+,PARTICIPANT8_CNT
+,PARTICIPANT9_CNT
+ from cu.zs_car_add_basetrain t
+ );
+ select * from sco.zs_car_basetest;
+ select * from 
+ 
+ 
